@@ -115,21 +115,18 @@ function shoot(e) {
       squares[currentLaserIndex].classList.remove('invader')
       squares[currentLaserIndex].classList.add('boom')
 
-      setTimeout(()=>squares[currentLaserIndex].classList.remote('boom'), 300)
+      setTimeout(() => squares[currentLaserIndex].classList.remove('boom'), 300)
     }
   }
 
   switch(e.key) {
       case 'ArrowUp':
         laserID = setInterval(moveLaser, 100)
-        clearInterval(laserID)
 
         const alienRemoval = alienInvaders.indexOf(currentLaserIndex)
-        aliensRemoved.push(aliensRemoved)
+        aliensRemoved.push(alienRemoval)
         results++
         resultsDisplay.innerHTML = results
-  
-
   }
 }
 
