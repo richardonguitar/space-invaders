@@ -92,6 +92,7 @@ function moveInvaders() {
     if(alienInvaders[i] > squares.length){ 
       resultsDisplay.innerHTML = 'GAME OVER'
       clearInterval(invadersID)
+      
     }
   }
   if (aliensRemoved.length === alienInvaders.length) {
@@ -103,31 +104,46 @@ function moveInvaders() {
 invadersId = setInterval(moveInvaders, 500)
 
 function shoot(e) {
-  let laserID
-  let currentLaserIndex = currentShooterIndex
+  let laserId;
+  let currentLaserIndex = currentShooterIndex;
+
   function moveLaser() {
-    squares[currentLaserIndex].classList.remove('laser')
-    currentLaserIndex -= width
-    squares[currentLaserIndex].classList.add('laser')
+    squares[currentLaserIndex].classList.remove('laser');
+    currentLaserIndex -= width;
 
-    if (squares[currentLaserIndex].classList.contains('invader')) {
-      squares[currentLaserIndex].classList.remove('laser')
-      squares[currentLaserIndex].classList.remove('invader')
-      squares[currentLaserIndex].classList.add('boom')
+    if (currentLaserIndex < 0) {
+      clearInterval(laserId); 
+    } else {
+      squares[currentLaserIndex].classList.add('laser');
 
-      setTimeout(() => squares[currentLaserIndex].classList.remove('boom'), 300)
+      if (squares[currentLaserIndex].classList.contains('invader')) {
+        squares[currentLaserIndex].classList.remove('laser');
+        squares[currentLaserIndex].classList.remove('invader');
+        squares[currentLaserIndex].classList.add('boom');
+
+        setTimeout(() => {
+          squares[currentLaserIndex].classList.remove('boom');
+        }, 50);
+
+        const alienRemoved = alienInvaders.indexOf(currentLaserIndex);
+        aliensRemoved.push(alienRemoved);
+        results++;
+        resultsDisplay.innerHTML = results;
+      }
     }
   }
 
   switch(e.key) {
-      case 'ArrowUp':
-        laserID = setInterval(moveLaser, 100)
+    case 'ArrowUp':
+      laserId = setInterval(moveLaser, 100);
+      break;
+  }
 
-        const alienRemoval = alienInvaders.indexOf(currentLaserIndex)
-        aliensRemoved.push(alienRemoval)
-        results++
-        resultsDisplay.innerHTML = results
+  if (e.key === 'ArrowUp') {
+    laserId = setInterval(moveLaser, 100);
   }
 }
+
+
 
 document.addEventListener('keydown', shoot)
